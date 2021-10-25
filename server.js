@@ -36,10 +36,9 @@ mongoose.connection
 // MODELS
 ////////////////////////////////
 const InventorySchema = new mongoose.Schema({
-    toolName: String,
+    name: String,
     inventory: Number,
     image: String,
-    link: String,
 });
 
 const Inventory = mongoose.model("Inventory", InventorySchema);
@@ -79,6 +78,30 @@ app.post("/inventory", async (req, res) => {
         res.status(400).json(error);
     }
 });
+
+// Inventory DELETE ROUTE
+app.delete("/inventory/:id", async (req, res) => {
+    try {
+      // send all tools
+      res.json(await Inventory.findByIdAndRemove(req.params.id));
+    } catch (error) {
+      //send error
+      res.status(400).json(error);
+    }
+  });
+  
+  // Inventory UPDATE ROUTE
+  app.put("/inventory/:id", async (req, res) => {
+    try {
+      // send all tools
+      res.json(
+        await Inventory.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      );
+    } catch (error) {
+      //send error
+      res.status(400).json(error);
+    }
+  });
 
 ///////////////////////////////
 // LISTENER
